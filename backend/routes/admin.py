@@ -424,3 +424,74 @@ def get_admin_reports():
             "acceptable_cases": db.similarity_results.count_documents({"reviewScore": {"$lt": 50}})
         }
     }), 200
+
+
+# ===================== ADMIN SIMILARITY SETTINGS =====================
+
+DEFAULT_SIMILARITY_SETTINGS = {
+    "key": "similarity_settings",
+    "tokenWeight": 20,
+    "structuralWeight": 25,
+    "semanticWeight": 30,
+    "behavioralWeight": 15,
+    "timelineWeight": 10,
+    "reviewThreshold": 80.0,
+    "highSimilarityThreshold": 60.0,
+    "embeddingModel": "text-embedding-004",
+    "aiAnalysisEnabled": True,
+    "analysisVersion": "1.0"
+}
+
+@admin_bp.route("/settings/similarity", methods=["GET"])
+@roles_required("ADMIN")
+def get_similarity_settings():
+    """Retrieve configurable similarity rules and weights."""
+    db = get_database()
+    doc = db.settings.find_one({"key": "similarity_settings"})
+    if not doc:
+        db.settings.insert_one(DEFAULT_SIMILARITY_SETTINGS.copy())
+        doc = DEFAULT_SIMILARITY_SETTINGS
+    return jsonify(serialize_doc(doc)), 200
+
+
+@admin_bp.route("/settings/similarity", methods=["PATCH", "POST"])
+@roles_required("ADMIN")
+def update_similarity_settings():
+    """Update similarity rules and weights. Validates that weights sum to 100%."""
+    data = request.get_json() or {}
+    db = get_database()
+
+    # Validate weights total if weights are being updated
+    weights_provided = {
+        "tokenWeight": data.get("tokenWeight"),
+        "structuralWeight": data.get("structuralWeight"),
+        "semanticWeight": data.get("semanticWeight"),
+        "behavioralWeight": data.get("behavioralWeight"),
+        "timelineWeight": data.get("timelineWeight")
+    }
+
+    if any(v is not None for v in weights_provided.values()):
+        # Fill missing with current
+        current = db.settings.find_one({"key": "similarity_settings"}) or DEFAULT_SIMILARITY_SETTINGS
+        tw = float(data.get("tokenWeight", current.get("tokenWeight", 20)))
+        sw = float(data.get("structuralWeight", current.get("structuralWeight", 25)))
+        semw = float(data.get("semanticWeight", current.get("semanticWeight", 30)))
+        bw = float(data.get("behavioralWeight", current.get("behavioralWeight", 15)))
+        tmw = float(data.get("timelineWeight", current.get("timelineWeight", 10)))
+
+        total = tw + sw + semw + bw + tmw
+        if abs(total - 100.0) > 0.01:
+            return jsonify({
+                "error": f"Similarity weights must total exactly 100%. Current sum: {total}%"
+            }), 400
+
+    data["key"] = "similarity_settings"
+    db.settings.update_one(
+        {"key": "similarity_settings"},
+        {"$set": data},
+        upsert=True
+    )
+
+    updated = db.settings.find_one({"key": "similarity_settings"})
+    return jsonify(serialize_doc(updated)), 200
+

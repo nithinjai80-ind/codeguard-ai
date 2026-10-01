@@ -110,7 +110,7 @@ export const StudentSubmissionsPage: React.FC = () => {
       );
     }
 
-    if (sub.status === 'REJECTED' || sub.status === 'ESCALATED_DISCIPLINARY') {
+    if ((sub.status as string) === 'REJECTED' || (sub.status as string) === 'ESCALATED_DISCIPLINARY') {
       return (
         <div className="p-3 rounded-xl bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/50 text-rose-900 dark:text-rose-200 text-xs">
           <p className="font-semibold flex items-center gap-1.5 mb-1">

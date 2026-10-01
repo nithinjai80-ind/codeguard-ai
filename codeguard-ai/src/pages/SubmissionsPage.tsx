@@ -256,8 +256,8 @@ export const SubmissionsPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {submissions.map((sub) => {
-                const isFlagged = sub.overallSimilarity >= 80;
-                const isModerate = sub.overallSimilarity >= 60;
+                const isFlagged = (sub.overallSimilarity ?? 0) >= 80;
+                const isModerate = (sub.overallSimilarity ?? 0) >= 60;
 
                 return (
                   <tr

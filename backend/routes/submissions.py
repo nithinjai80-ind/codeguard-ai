@@ -35,6 +35,17 @@ def get_submissions():
             or q in s.get("studentId", "").lower()
         ]
 
+    # Security check: if requester is a STUDENT, strip all internal similarity details
+    user = getattr(g, "current_user", None)
+    if user and user.get("role") == "STUDENT":
+        for s in results:
+            s.pop("overallSimilarity", None)
+            s.pop("pairedSubmissionId", None)
+            s.pop("analysisDetails", None)
+            s.pop("reviewScore", None)
+            s.pop("evidence", None)
+            s.pop("transformations", None)
+
     return jsonify(results), 200
 
 @submissions_bp.route("/<submission_id>", methods=["GET"])
@@ -42,9 +53,20 @@ def get_submission(submission_id):
     db = get_database()
     submission = db.submissions.find_one({"id": submission_id})
     if not submission:
-        # Check by _id if needed
         return jsonify({"error": f"Submission {submission_id} not found"}), 404
-    return jsonify(serialize_doc(submission)), 200
+    
+    doc = serialize_doc(submission)
+    user = getattr(g, "current_user", None)
+    if user and user.get("role") == "STUDENT":
+        doc.pop("overallSimilarity", None)
+        doc.pop("pairedSubmissionId", None)
+        doc.pop("analysisDetails", None)
+        doc.pop("reviewScore", None)
+        doc.pop("evidence", None)
+        doc.pop("transformations", None)
+
+    return jsonify(doc), 200
+
 
 @submissions_bp.route("", methods=["POST"])
 def create_submission():

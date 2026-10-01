@@ -440,3 +440,119 @@ def get_teacher_students():
             })
 
     return jsonify(students), 200
+
+
+@teacher_bp.route("/submissions/<submission_id>/similarity", methods=["GET"])
+@roles_required("TEACHER", "ADMIN")
+def get_submission_similarity(submission_id):
+    """Retrieve similarity cases related to a given submission ID."""
+    db = get_database()
+    pairs_cursor = db.similarity_results.find({
+        "$or": [{"submissionAId": submission_id}, {"submissionBId": submission_id}]
+    }).sort("reviewScore", -1)
+    
+    results = [serialize_doc(doc) for doc in pairs_cursor]
+    return jsonify(results), 200
+
+
+@teacher_bp.route("/similarity/<pair_id>/compare", methods=["GET"])
+@roles_required("TEACHER", "ADMIN")
+def get_similarity_compare(pair_id):
+    """Side-by-side comparison data for teacher investigation view."""
+    return get_teacher_similarity_pair(pair_id)
+
+
+@teacher_bp.route("/similarity/clusters", methods=["GET"])
+@roles_required("TEACHER", "ADMIN")
+def get_similarity_clusters():
+    """Group submissions by similarity threshold into Similarity Clusters."""
+    db = get_database()
+    pairs = list(db.similarity_results.find({"reviewScore": {"$gte": 60}}))
+    
+    # Graph based clustering (Connected Components)
+    adjacency = {}
+    student_names = {}
+    for p in pairs:
+        sa = p.get("submissionAId")
+        sb = p.get("submissionBId")
+        na = p.get("studentAName", "Student A")
+        nb = p.get("studentBName", "Student B")
+        student_names[sa] = na
+        student_names[sb] = nb
+        
+        adjacency.setdefault(sa, []).append((sb, p.get("reviewScore", 0)))
+        adjacency.setdefault(sb, []).append((sa, p.get("reviewScore", 0)))
+
+    visited = set()
+    clusters = []
+    cluster_idx = 1
+
+    for node in adjacency:
+        if node not in visited:
+            component = []
+            queue = [node]
+            visited.add(node)
+            scores = []
+            
+            while queue:
+                curr = queue.pop(0)
+                component.append({
+                    "submissionId": curr,
+                    "studentName": student_names.get(curr, "Student")
+                })
+                for nxt, score in adjacency.get(curr, []):
+                    scores.append(score)
+                    if nxt not in visited:
+                        visited.add(nxt)
+                        queue.append(nxt)
+            
+            if len(component) >= 2:
+                avg_score = round(sum(scores) / max(len(scores), 1), 1)
+                clusters.append({
+                    "clusterId": f"CLUSTER-{cluster_idx}",
+                    "label": "Similarity Cluster",
+                    "questionTitle": "Code Integrity Group",
+                    "memberCount": len(component),
+                    "averageSimilarity": avg_score,
+                    "members": component
+                })
+                cluster_idx += 1
+
+    return jsonify(clusters), 200
+
+
+@teacher_bp.route("/similarity/network", methods=["GET"])
+@roles_required("TEACHER", "ADMIN")
+def get_similarity_network():
+    """Returns nodes and links for the interactive evidence network graph."""
+    db = get_database()
+    pairs = list(db.similarity_results.find({"reviewScore": {"$gte": 50}}).limit(30))
+    
+    nodes = []
+    links = []
+    added_nodes = set()
+
+    for p in pairs:
+        sa_id = p.get("submissionAId", "A")
+        sb_id = p.get("submissionBId", "B")
+        sa_name = p.get("studentAName", "Student A")
+        sb_name = p.get("studentBName", "Student B")
+        score = p.get("reviewScore", 50)
+
+        if sa_id not in added_nodes:
+            nodes.append({"id": sa_id, "label": sa_name, "type": "Student", "val": 10})
+            added_nodes.add(sa_id)
+
+        if sb_id not in added_nodes:
+            nodes.append({"id": sb_id, "label": sb_name, "type": "Student", "val": 10})
+            added_nodes.add(sb_id)
+
+        links.append({
+            "source": sa_id,
+            "target": sb_id,
+            "value": score,
+            "label": f"Similarity: {score}%"
+        })
+
+    return jsonify({"nodes": nodes, "links": links}), 200
+

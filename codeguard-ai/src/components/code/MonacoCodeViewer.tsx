@@ -6,6 +6,7 @@ interface MonacoCodeViewerProps {
   code: string;
   language?: string;
   fileName?: string;
+  title?: string;
   highlightRegions?: CodeRegion[];
   activeRegionIndex?: number | null;
   onRegionClick?: (index: number) => void;

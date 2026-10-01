@@ -90,11 +90,7 @@ export const SimilarityAnalysisPage: React.FC = () => {
     if (!currentPair) return;
     setIsSavingDecision(true);
     try {
-      await CodeGuardApiService.updateReviewDecision(currentPair.id, {
-        verdict: tutorVerdict,
-        notes: tutorNotes,
-        tutorName: 'Dr. Priya Kumar'
-      });
+      await CodeGuardApiService.updateReviewDecision(currentPair.id, tutorVerdict, tutorNotes);
       addToast({
         type: 'success',
         title: 'Review Decision Logged',
@@ -401,7 +397,7 @@ export const SimilarityAnalysisPage: React.FC = () => {
                     if (!subA) return;
                     setIsSavingDecision(true);
                     try {
-                      await RoxApiService.reviewSubmission(
+                      await CodeGuardApiService.reviewSubmission(
                         subA.id,
                         tutorVerdict as any,
                         tutorNotes

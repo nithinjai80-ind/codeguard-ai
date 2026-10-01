@@ -44,7 +44,7 @@ export const ReviewQueuePage: React.FC = () => {
   const filteredPairs = pairs.filter((p) => {
     if (activeTab === 'HIGH') return p.reviewScore >= 85;
     if (activeTab === 'MEDIUM') return p.reviewScore >= 70 && p.reviewScore < 85;
-    if (activeTab === 'RECENT') return p.timeDeltaMinutes <= 15;
+    if (activeTab === 'RECENT') return (p.timeDeltaMinutes ?? 0) <= 15;
     if (activeTab === 'REVIEWED') return p.status === 'Reviewed';
     return true;
   });
@@ -54,11 +54,7 @@ export const ReviewQueuePage: React.FC = () => {
     if (!selectedPairForReview) return;
 
     try {
-      await CodeGuardApiService.updateReviewDecision(selectedPairForReview.id, {
-        verdict: modalVerdict,
-        notes: modalNotes,
-        tutorName: 'Dr. Priya Kumar'
-      });
+      await CodeGuardApiService.updateReviewDecision(selectedPairForReview.id, modalVerdict, modalNotes);
 
       addToast({
         type: 'success',
@@ -101,7 +97,7 @@ export const ReviewQueuePage: React.FC = () => {
           { id: 'ALL', label: 'All Cases', count: pairs.length },
           { id: 'HIGH', label: 'High Priority', count: pairs.filter((p) => p.reviewScore >= 85).length },
           { id: 'MEDIUM', label: 'Medium Priority', count: pairs.filter((p) => p.reviewScore >= 70 && p.reviewScore < 85).length },
-          { id: 'RECENT', label: 'Recently Added', count: pairs.filter((p) => p.timeDeltaMinutes <= 15).length },
+          { id: 'RECENT', label: 'Recently Added', count: pairs.filter((p) => (p.timeDeltaMinutes ?? 0) <= 15).length },
           { id: 'REVIEWED', label: 'Reviewed', count: pairs.filter((p) => p.status === 'Reviewed').length }
         ].map((tab) => (
           <button

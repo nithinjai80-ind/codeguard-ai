@@ -5,6 +5,7 @@ export type ViewType =
   | 'login'
   | 'register'
   | 'forgot-password'
+  | 'dashboard'
   // Student views
   | 'student-dashboard'
   | 'student-questions'
