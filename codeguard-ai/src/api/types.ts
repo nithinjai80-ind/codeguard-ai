@@ -349,3 +349,55 @@ export interface SystemSettings {
     astFlattening: boolean;
   };
 }
+
+// ===================== CODING ACTIVITY MONITORING =====================
+
+/**
+ * Keyboard event types tracked inside the code editor only.
+ * No clipboard content is captured. Only the event type is stored.
+ */
+export type CodingEventType =
+  | 'COPY'
+  | 'PASTE'
+  | 'CUT'
+  | 'SELECT_ALL'
+  | 'UNDO'
+  | 'REDO'
+  | 'WINDOWS_KEY';
+
+/** A single coding activity event (server representation). */
+export interface CodingActivityEvent {
+  eventType: CodingEventType;
+  timestamp: string;       // ISO-8601
+  source: 'CODE_EDITOR';
+  sessionId?: string;
+}
+
+/** Payload sent from the frontend to POST /api/student/activity */
+export interface ActivityEventPayload {
+  questionId: string;
+  sessionId: string;
+  eventType: CodingEventType;
+  submissionId?: string;
+}
+
+/** Aggregated activity data returned by GET /api/teacher/submissions/:id/activity */
+export interface CodingActivitySummary {
+  studentId: string;
+  studentName: string;
+  questionId: string;
+  questionTitle: string;
+  submissionId: string;
+  copyCount: number;
+  pasteCount: number;
+  cutCount: number;
+  selectAllCount: number;
+  undoCount: number;
+  redoCount: number;
+  windowsKeyCount: number;
+  totalEvents: number;
+  sessionDurationMinutes: number | null;
+  events: CodingActivityEvent[];
+  disclaimer: string;
+}
+

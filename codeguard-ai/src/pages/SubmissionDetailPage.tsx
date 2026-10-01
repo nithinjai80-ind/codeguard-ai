@@ -22,6 +22,7 @@ import {
   XCircle,
   RotateCcw
 } from 'lucide-react';
+import { StudentCodingActivityCard } from '../components/activity/StudentCodingActivityCard';
 
 export const SubmissionDetailPage: React.FC = () => {
   const { selectedSubmissionId, setCurrentView, navigateToSimilarity, addToast } = useApp();
@@ -358,6 +359,9 @@ export const SubmissionDetailPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Coding Activity Card */}
+          <StudentCodingActivityCard submissionId={submission.id} />
         </div>
       </div>
 
