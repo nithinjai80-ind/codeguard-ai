@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
 import { useAuth } from '../context/AuthContext';
 import { RoxApiService } from '../api/apiService';
-import { Question, CodeExecutionResult } from '../api/types';
+import { Question, CodeExecutionResult, CodingEventType } from '../api/types';
 import {
   Play,
   Send,
@@ -66,6 +66,10 @@ export const StudentCodingPage: React.FC = () => {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  // Coding Activity Monitoring — session tracking
+  const sessionIdRef = useRef<string>(`SESSION-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+  const sessionStartRef = useRef<number>(Date.now());
+
   useEffect(() => {
     const loadQuestion = async () => {
       try {
@@ -80,6 +84,44 @@ export const StudentCodingPage: React.FC = () => {
     };
     loadQuestion();
   }, [selectedQuestionId]);
+
+  /**
+   * Coding Activity Monitor
+   * -----------------------
+   * Detects editor-scoped keyboard shortcuts and sends a lightweight event log
+   * to the backend. No clipboard content is captured or transmitted.
+   * All shortcuts continue to work normally — we never call e.preventDefault().
+   */
+  const handleEditorKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      let eventType: CodingEventType | null = null;
+
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      if (ctrl) {
+        switch (e.key.toLowerCase()) {
+          case 'c': eventType = 'COPY'; break;
+          case 'v': eventType = 'PASTE'; break;
+          case 'x': eventType = 'CUT'; break;
+          case 'a': eventType = 'SELECT_ALL'; break;
+          case 'z': eventType = 'UNDO'; break;
+          case 'y': eventType = 'REDO'; break;
+        }
+      } else if (e.key === 'Meta' || e.key === 'OS' || e.key === 'Win') {
+        eventType = 'WINDOWS_KEY';
+      }
+
+      if (eventType) {
+        // Fire-and-forget: never blocks the student's editor
+        RoxApiService.logCodingActivity({
+          questionId: selectedQuestionId,
+          sessionId: sessionIdRef.current,
+          eventType
+        });
+      }
+    },
+    [selectedQuestionId]
+  );
 
   const handleLanguageChange = async (newLang: 'Java' | 'Python' | 'C++' | 'JavaScript') => {
     setLanguage(newLang);
@@ -364,6 +406,7 @@ export const StudentCodingPage: React.FC = () => {
             <textarea
               value={code}
               onChange={(e) => setCode(e.target.value)}
+              onKeyDown={handleEditorKeyDown}
               spellCheck={false}
               autoCapitalize="none"
               autoCorrect="off"

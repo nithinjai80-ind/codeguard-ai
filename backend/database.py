@@ -56,6 +56,15 @@ def _init_indexes(db):
         db.timeline_events.create_index([("id", ASCENDING)], unique=True)
         db.timeline_events.create_index([("timestamp", ASCENDING)])
         db.settings.create_index([("key", ASCENDING)], unique=True)
+        # Coding Activity Events indexes (student monitoring)
+        db.coding_activity_events.create_index([("studentId", ASCENDING)])
+        db.coding_activity_events.create_index([("questionId", ASCENDING)])
+        db.coding_activity_events.create_index([("submissionId", ASCENDING)])
+        db.coding_activity_events.create_index([("sessionId", ASCENDING)])
+        db.coding_activity_events.create_index([("timestampEpoch", ASCENDING)])
+        db.coding_activity_events.create_index(
+            [("studentId", ASCENDING), ("questionId", ASCENDING), ("timestampEpoch", ASCENDING)]
+        )
     except Exception as e:
         logger.warning(f"Index creation warning: {e}")
 

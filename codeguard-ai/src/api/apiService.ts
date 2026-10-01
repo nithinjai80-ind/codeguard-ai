@@ -13,7 +13,9 @@ import {
   StudentStats,
   StudentSubmissionItem,
   TeacherDashboardData,
-  AdminStats
+  AdminStats,
+  ActivityEventPayload,
+  CodingActivitySummary
 } from './types';
 import {
   INITIAL_SUBMISSIONS,
@@ -700,6 +702,41 @@ export class RoxApiService {
 
   public static async getTimeline(): Promise<TimelineEvent[]> {
     return await this.getTimelineEvents();
+  }
+
+  // ===================== CODING ACTIVITY API =====================
+
+  /**
+   * Student: log a coding activity event from inside the code editor.
+   * Only the eventType, questionId, and sessionId are sent — never clipboard content.
+   */
+  public static async logCodingActivity(payload: ActivityEventPayload): Promise<void> {
+    try {
+      await this.request<{ status: string }>('/student/activity', {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+    } catch {
+      // Silent fail — monitoring is non-blocking; student workflow must never be interrupted
+    }
+  }
+
+  /**
+   * Teacher: retrieve aggregated coding activity for a specific submission.
+   * Returns counts by event type and a full timeline.
+   * IMPORTANT: This is supporting evidence only — not a plagiarism verdict.
+   */
+  public static async getSubmissionActivity(
+    submissionId: string
+  ): Promise<CodingActivitySummary | null> {
+    try {
+      return await this.request<CodingActivitySummary>(
+        `/teacher/submissions/${submissionId}/activity`
+      );
+    } catch {
+      // Return null if no activity recorded yet — not an error condition
+      return null;
+    }
   }
 }
 

@@ -23,6 +23,7 @@ import {
   Download,
   Info
 } from 'lucide-react';
+import { StudentCodingActivityCard } from '../components/activity/StudentCodingActivityCard';
 
 export const SimilarityAnalysisPage: React.FC = () => {
   const { similaritySelection, setSimilaritySelection, addToast } = useApp();
@@ -336,6 +337,21 @@ export const SimilarityAnalysisPage: React.FC = () => {
             timelineScore={currentPair.timeline}
             overallScore={currentPair.reviewScore}
           />
+
+          {/* Coding Activity — per student (Student A) */}
+          {subA && (
+            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
+              <div className="flex items-center gap-2 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+                <h3 className="font-bold text-slate-900 dark:text-white text-base">
+                  Coding Activity — {subA.studentName}
+                </h3>
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 font-semibold">
+                  Behavioral Signal
+                </span>
+              </div>
+              <StudentCodingActivityCard submissionId={subA.id} />
+            </div>
+          )}
 
           {/* Teacher Decision & Review Form */}
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">

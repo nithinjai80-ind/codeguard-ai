@@ -50,6 +50,7 @@ def create_app():
     from routes.student import student_bp
     from routes.teacher import teacher_bp
     from routes.admin import admin_bp
+    from routes.activity import activity_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(submissions_bp)
@@ -66,6 +67,7 @@ def create_app():
     app.register_blueprint(student_bp)
     app.register_blueprint(teacher_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(activity_bp)
 
     @app.route("/", methods=["GET"])
     @app.route("/api/health", methods=["GET"])
