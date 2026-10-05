@@ -523,6 +523,12 @@ export class RoxApiService {
     });
   }
 
+  public static async deleteAdminUser(id: string): Promise<{ message: string }> {
+    return await this.request<{ message: string }>(`/admin/users/${id}`, {
+      method: 'DELETE'
+    });
+  }
+
   public static async getAdminReports(): Promise<any> {
     try {
       return await this.request<any>('/admin/reports');
