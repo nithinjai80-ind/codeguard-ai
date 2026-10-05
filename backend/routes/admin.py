@@ -352,6 +352,36 @@ def create_user():
     }), 201
 
 
+@admin_bp.route("/users/<user_id>", methods=["DELETE"])
+@roles_required("ADMIN")
+def delete_user(user_id):
+    """
+    Permanently delete a user account.
+    - Cannot delete your own account.
+    - Removes the user document from the users collection.
+    """
+    from bson import ObjectId
+    db = get_database()
+    current_user = getattr(g, "current_user", None)
+
+    # Prevent self-deletion
+    if current_user and str(current_user.get("_id")) == user_id:
+        return jsonify({"error": "You cannot delete your own administrator account."}), 403
+
+    try:
+        user = db.users.find_one({"_id": ObjectId(user_id)})
+    except Exception:
+        user = db.users.find_one({"_id": user_id}) or db.users.find_one({"email": user_id})
+
+    if not user:
+        return jsonify({"error": f"User {user_id} not found"}), 404
+
+    deleted_name = user.get("name", "Unknown")
+    db.users.delete_one({"_id": user["_id"]})
+
+    return jsonify({"message": f"User '{deleted_name}' has been permanently deleted."}), 200
+
+
 @admin_bp.route("/users/<user_id>", methods=["PATCH"])
 @roles_required("ADMIN")
 def update_user(user_id):

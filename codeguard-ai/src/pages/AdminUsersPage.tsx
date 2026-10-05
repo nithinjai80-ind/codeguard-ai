@@ -15,7 +15,9 @@ import {
   X,
   KeyRound,
   Mail,
-  Building
+  Building,
+  Trash2,
+  AlertTriangle
 } from 'lucide-react';
 
 export const AdminUsersPage: React.FC = () => {
@@ -29,6 +31,10 @@ export const AdminUsersPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editUserId, setEditUserId] = useState<string | null>(null);
+
+  // Delete Confirmation State
+  const [deleteTarget, setDeleteTarget] = useState<User | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Form Fields
   const [name, setName] = useState('');
@@ -127,6 +133,29 @@ export const AdminUsersPage: React.FC = () => {
         title: 'Error Saving User',
         message: err.message || 'Operation failed.'
       });
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    if (!deleteTarget) return;
+    setIsDeleting(true);
+    try {
+      await RoxApiService.deleteAdminUser(deleteTarget.id);
+      addToast({
+        type: 'success',
+        title: 'User Deleted',
+        message: `'${deleteTarget.name}' has been permanently removed.`
+      });
+      setDeleteTarget(null);
+      loadUsers();
+    } catch (err: any) {
+      addToast({
+        type: 'error',
+        title: 'Delete Failed',
+        message: err.message || 'Could not delete user.'
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -302,9 +331,16 @@ export const AdminUsersPage: React.FC = () => {
                         <button
                           onClick={() => handleToggleStatus(stu)}
                           title={stu.status === 'INACTIVE' ? 'Activate Account' : 'Deactivate Account'}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-colors cursor-pointer"
                         >
                           {stu.status === 'INACTIVE' ? <UserCheck className="w-3.5 h-3.5" /> : <UserX className="w-3.5 h-3.5" />}
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(stu)}
+                          title="Delete User"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -376,9 +412,16 @@ export const AdminUsersPage: React.FC = () => {
                         <button
                           onClick={() => handleToggleStatus(tch)}
                           title={tch.status === 'INACTIVE' ? 'Activate Account' : 'Deactivate Account'}
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/30 transition-colors cursor-pointer"
                         >
                           {tch.status === 'INACTIVE' ? <UserCheck className="w-3.5 h-3.5" /> : <UserX className="w-3.5 h-3.5" />}
+                        </button>
+                        <button
+                          onClick={() => setDeleteTarget(tch)}
+                          title="Delete User"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </td>
@@ -386,6 +429,61 @@ export const AdminUsersPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs">
+          <div className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-800 shadow-2xl animate-in zoom-in-95 duration-150">
+            <div className="flex flex-col items-center text-center gap-3 mb-5">
+              <div className="w-12 h-12 rounded-full bg-rose-500/10 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-rose-500" />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-slate-900 dark:text-white">Delete User Account?</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  You are about to permanently delete <span className="font-semibold text-slate-700 dark:text-slate-300">{deleteTarget.name}</span>.
+                  This action <span className="text-rose-500 font-semibold">cannot be undone</span>.
+                </p>
+              </div>
+              <div className="w-full rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 p-3 text-left text-xs space-y-1">
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                  <span className="font-semibold w-16 shrink-0">Name:</span>
+                  <span>{deleteTarget.name}</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                  <span className="font-semibold w-16 shrink-0">Email:</span>
+                  <span className="font-mono">{deleteTarget.email}</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                  <span className="font-semibold w-16 shrink-0">Role:</span>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                    deleteTarget.role === 'TEACHER'
+                      ? 'bg-blue-500/10 text-blue-600 border border-blue-500/20'
+                      : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                  }`}>{deleteTarget.role}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors cursor-pointer disabled:opacity-60"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteUser}
+                disabled={isDeleting}
+                className="flex-1 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-md shadow-rose-600/20 transition-colors cursor-pointer disabled:opacity-60 flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                {isDeleting ? 'Deleting...' : 'Delete User'}
+              </button>
+            </div>
           </div>
         </div>
       )}
