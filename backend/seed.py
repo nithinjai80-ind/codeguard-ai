@@ -13,7 +13,7 @@ ARUN_KUMAR_CODE = """package edu.nehru.cs.algorithms;
 
 /**
  * Binary Search Implementation
- * Student: Arun Kumar (NIT-CS-2024-042)
+ * Student: Selvakumar G (NIT-CS-2024-042)
  * Department of Computer Science & Engineering
  */
 public class BinarySearchSolution {
@@ -205,7 +205,7 @@ def seed_all():
         },
         # STUDENT
         {
-            "name": "Arun Kumar",
+            "name": "Selvakumar G",
             "email": "student@rox.ai",
             "password": hash_password("Student@123"),
             "role": "STUDENT",
@@ -214,7 +214,7 @@ def seed_all():
             "createdAt": now_iso
         },
         {
-            "name": "Arun Kumar",
+            "name": "Selvakumar G",
             "email": "arun.kumar@student.nehru.ac.in",
             "password": hash_password("Student@123"),
             "role": "STUDENT",
@@ -499,7 +499,7 @@ def seed_all():
         {
             "id": "SUB-1042",
             "studentId": "NIT-CS-2024-042",
-            "studentName": "Arun Kumar",
+            "studentName": "Selvakumar G",
             "studentEmail": "arun.kumar@student.nehru.ac.in",
             "department": "Computer Science and Engineering",
             "assignmentId": "ASSIGN-01",
@@ -665,7 +665,7 @@ def seed_all():
             "id": "PAIR-1",
             "submissionAId": "SUB-1042",
             "submissionBId": "SUB-1049",
-            "studentAName": "Arun Kumar",
+            "studentAName": "Selvakumar G",
             "studentBName": "Kavin Raj",
             "assignmentTitle": "Binary Search Implementation",
             "structural": 88,
@@ -716,7 +716,7 @@ def seed_all():
             "submissionAId": "SUB-1043",
             "submissionBId": "SUB-1042",
             "studentAName": "Sneha Patel",
-            "studentBName": "Arun Kumar",
+            "studentBName": "Selvakumar G",
             "assignmentTitle": "Binary Search Implementation",
             "structural": 22,
             "semantic": 30,
@@ -744,7 +744,7 @@ def seed_all():
             "submissionCount": 5,
             "averageSimilarity": 89.4,
             "students": [
-                {"studentId": "NIT-CS-2024-042", "name": "Arun Kumar", "submissionId": "SUB-1042", "similarityScore": 91, "centrality": 0.94},
+                {"studentId": "NIT-CS-2024-042", "name": "Selvakumar G", "submissionId": "SUB-1042", "similarityScore": 91, "centrality": 0.94},
                 {"studentId": "NIT-CS-2024-049", "name": "Kavin Raj", "submissionId": "SUB-1049", "similarityScore": 91, "centrality": 0.92},
                 {"studentId": "NIT-CS-2024-051", "name": "Vignesh K", "submissionId": "SUB-1051", "similarityScore": 88, "centrality": 0.82},
                 {"studentId": "NIT-CS-2024-055", "name": "Deepak M", "submissionId": "SUB-1055", "similarityScore": 87, "centrality": 0.76},
@@ -785,7 +785,7 @@ def seed_all():
             "time": "10:45 AM",
             "date": "Oct 24, 2026",
             "timestamp": 1792838700,
-            "studentName": "Arun Kumar",
+            "studentName": "Selvakumar G",
             "studentId": "NIT-CS-2024-042",
             "submissionId": "SUB-1042",
             "assignmentTitle": "Binary Search Implementation",
@@ -804,9 +804,9 @@ def seed_all():
             "assignmentTitle": "Binary Search Implementation",
             "eventType": "FLAGGED_SIMILARITY",
             "similarityWithPrevious": 91,
-            "correlatedWithStudent": "Arun Kumar",
+            "correlatedWithStudent": "Selvakumar G",
             "revisionNumber": 1,
-            "timeDeltaFromPrevious": "9 mins after Arun Kumar",
+            "timeDeltaFromPrevious": "9 mins after Selvakumar G",
             "details": "Submitted 9 mins after SUB-1042 with 91% AST & semantic correlation."
         },
         {
@@ -829,7 +829,7 @@ def seed_all():
     students_data = [
         {
             "id": "NIT-CS-2024-042",
-            "name": "Arun Kumar",
+            "name": "Selvakumar G",
             "rollNumber": "24CS042",
             "email": "arun.kumar@student.nehru.ac.in",
             "department": "Computer Science and Engineering",

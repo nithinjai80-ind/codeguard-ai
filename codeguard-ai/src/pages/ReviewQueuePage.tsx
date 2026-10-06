@@ -31,7 +31,11 @@ export const ReviewQueuePage: React.FC = () => {
     setLoading(true);
     try {
       const data = await CodeGuardApiService.getSimilarityPairs();
-      setPairs(data);
+      // Exclude pairs where both students have the same name (invalid self-comparisons)
+      const validPairs = data.filter(
+        (p) => p.studentAName?.trim().toLowerCase() !== p.studentBName?.trim().toLowerCase()
+      );
+      setPairs(validPairs);
     } finally {
       setLoading(false);
     }
@@ -42,6 +46,8 @@ export const ReviewQueuePage: React.FC = () => {
   }, []);
 
   const filteredPairs = pairs.filter((p) => {
+    // Always enforce different-student rule
+    if (p.studentAName?.trim().toLowerCase() === p.studentBName?.trim().toLowerCase()) return false;
     if (activeTab === 'HIGH') return p.reviewScore >= 85;
     if (activeTab === 'MEDIUM') return p.reviewScore >= 70 && p.reviewScore < 85;
     if (activeTab === 'RECENT') return (p.timeDeltaMinutes ?? 0) <= 15;
@@ -186,8 +192,25 @@ export const ReviewQueuePage: React.FC = () => {
                   <div className="text-[10px] text-slate-400 uppercase font-semibold">
                     Review Score
                   </div>
-                  <div className="text-2xl font-bold font-mono text-rose-600 dark:text-rose-400">
+                  <div
+                    className={`text-2xl font-bold font-mono ${
+                      pair.reviewScore < 50
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-rose-600 dark:text-rose-400'
+                    }`}
+                  >
                     {pair.reviewScore}%
+                  </div>
+                  <div className="mt-1">
+                    {pair.reviewScore < 50 ? (
+                      <Badge variant="success" size="sm" dot>
+                        Low Similarity Alert
+                      </Badge>
+                    ) : (
+                      <Badge variant="danger" size="sm" dot>
+                        High Similarity Alert
+                      </Badge>
+                    )}
                   </div>
                 </div>
 

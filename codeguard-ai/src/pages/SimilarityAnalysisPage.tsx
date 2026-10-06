@@ -47,9 +47,12 @@ export const SimilarityAnalysisPage: React.FC = () => {
       setSubmissions(allSubs);
 
       const targetA = allSubs.find((s) => s.id === similaritySelection.submissionAId) || allSubs[0];
+      // Always ensure Student B is a DIFFERENT student from Student A
       const targetB =
-        allSubs.find((s) => s.id === similaritySelection.submissionBId) ||
-        allSubs.find((s) => s.id !== targetA.id) ||
+        allSubs.find(
+          (s) => s.id === similaritySelection.submissionBId && s.studentName !== targetA.studentName
+        ) ||
+        allSubs.find((s) => s.studentName !== targetA.studentName) ||
         allSubs[1];
 
       setSubA(targetA);
@@ -189,11 +192,14 @@ export const SimilarityAnalysisPage: React.FC = () => {
               }}
               className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500 font-mono"
             >
-              {submissions.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.studentName} — {s.id} ({s.assignmentTitle})
-                </option>
-              ))}
+              {/* Filter out same student as Student A to enforce different-student comparison */}
+              {submissions
+                .filter((s) => s.studentName !== subA?.studentName)
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.studentName} — {s.id} ({s.assignmentTitle})
+                  </option>
+                ))}
             </select>
           </div>
         </div>
@@ -230,12 +236,24 @@ export const SimilarityAnalysisPage: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-4xl font-extrabold font-mono text-rose-600 dark:text-rose-400">
+                <span
+                  className={`text-4xl font-extrabold font-mono ${
+                    currentPair.reviewScore < 50
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-rose-600 dark:text-rose-400'
+                  }`}
+                >
                   {currentPair.reviewScore}%
                 </span>
-                <Badge variant="danger" size="md" dot>
-                  High Similarity Alert
-                </Badge>
+                {currentPair.reviewScore < 50 ? (
+                  <Badge variant="success" size="md" dot>
+                    Low Similarity Alert
+                  </Badge>
+                ) : (
+                  <Badge variant="danger" size="md" dot>
+                    High Similarity Alert
+                  </Badge>
+                )}
               </div>
             </div>
 
