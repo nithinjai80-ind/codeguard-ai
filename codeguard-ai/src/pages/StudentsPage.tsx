@@ -86,6 +86,9 @@ export const StudentsPage: React.FC = () => {
         <div className="relative max-w-sm w-full">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
           <input
+            id="students-search"
+            name="studentsSearch"
+            aria-label="Search student name, roll number, or ID"
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}

@@ -135,11 +135,13 @@ export const SimilarityAnalysisPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-center">
           {/* Student A Selector */}
           <div className="lg:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+            <label htmlFor="similarity-student-a-select" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-indigo-500" />
               Student A (Anchor Submission)
             </label>
             <select
+              id="similarity-student-a-select"
+              name="studentAId"
               value={subA?.id || ''}
               onChange={(e) => {
                 const found = submissions.find((s) => s.id === e.target.value);
@@ -174,11 +176,13 @@ export const SimilarityAnalysisPage: React.FC = () => {
 
           {/* Student B Selector */}
           <div className="lg:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
+            <label htmlFor="similarity-student-b-select" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-rose-500" />
               Student B (Paired Comparison)
             </label>
             <select
+              id="similarity-student-b-select"
+              name="studentBId"
               value={subB?.id || ''}
               onChange={(e) => {
                 const found = submissions.find((s) => s.id === e.target.value);
@@ -409,10 +413,12 @@ export const SimilarityAnalysisPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="tutor-notes-textarea" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Teacher Feedback & Investigation Notes
                 </label>
                 <textarea
+                  id="tutor-notes-textarea"
+                  name="tutorNotes"
                   rows={3}
                   value={tutorNotes}
                   onChange={(e) => setTutorNotes(e.target.value)}

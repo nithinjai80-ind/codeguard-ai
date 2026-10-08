@@ -111,6 +111,73 @@ def get_me():
         }
     }), 200
 
+@auth_bp.route("/profile", methods=["PATCH", "PUT"])
+@auth_bp.route("/me", methods=["PATCH", "PUT"])
+@jwt_required_custom
+def update_profile():
+    """
+    Update profile details for the currently authenticated user (Teacher, Student, or Admin).
+    Saves changes (name, department, password) directly to the MongoDB database.
+    """
+    user = getattr(g, "current_user", None)
+    if not user:
+        return jsonify({"error": "User not authenticated"}), 401
+
+    data = request.get_json() or {}
+    db = get_database()
+    user_id = user["_id"]
+    user_email = user.get("email")
+
+    update_fields = {}
+    if "name" in data and data["name"].strip():
+        new_name = data["name"].strip()
+        update_fields["name"] = new_name
+        # Update matching student record if any
+        db.students.update_many(
+            {"$or": [{"email": user_email}, {"name": user.get("name")}]},
+            {"$set": {"name": new_name}}
+        )
+        # Update matching submissions
+        db.submissions.update_many(
+            {"$or": [{"studentEmail": user_email}, {"student_id": str(user_id)}]},
+            {"$set": {"studentName": new_name}}
+        )
+
+    if "department" in data and data["department"].strip():
+        new_dept = data["department"].strip()
+        update_fields["department"] = new_dept
+        db.students.update_many(
+            {"$or": [{"email": user_email}, {"name": user.get("name")}]},
+            {"$set": {"department": new_dept}}
+        )
+
+    if "password" in data and data["password"].strip():
+        current_pw = data.get("currentPassword", "").strip()
+        # If current password was provided, verify it
+        if current_pw and not check_password(current_pw, user.get("password", "")):
+            return jsonify({"error": "Current password does not match"}), 400
+        update_fields["password"] = hash_password(data["password"].strip())
+
+    if update_fields:
+        update_fields["updatedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        db.users.update_one({"_id": user_id}, {"$set": update_fields})
+
+    updated_user = db.users.find_one({"_id": user_id})
+    role = updated_user.get("role", "STUDENT")
+    if role == "TUTOR":
+        role = "TEACHER"
+
+    return jsonify({
+        "message": "Profile updated and saved to database successfully",
+        "user": {
+            "id": str(updated_user.get("_id")),
+            "name": updated_user.get("name"),
+            "email": updated_user.get("email"),
+            "role": role,
+            "department": updated_user.get("department", "Computer Science and Engineering")
+        }
+    }), 200
+
 @auth_bp.route("/forgot-password", methods=["POST"])
 def forgot_password():
     data = request.get_json() or {}
@@ -122,3 +189,4 @@ def forgot_password():
     return jsonify({
         "message": f"Password reset instructions have been dispatched to {email}."
     }), 200
+

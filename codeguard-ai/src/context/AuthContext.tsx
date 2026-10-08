@@ -8,6 +8,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<User>;
   register: (name: string, email: string, password: string, role?: string, department?: string) => Promise<void>;
+  updateProfile: (data: { name?: string; department?: string; password?: string; currentPassword?: string }) => Promise<User>;
   logout: () => void;
 }
 
@@ -85,6 +86,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('cg_user', JSON.stringify(regUser));
   };
 
+  const updateProfile = async (data: { name?: string; department?: string; password?: string; currentPassword?: string }): Promise<User> => {
+    const res = await RoxApiService.updateProfile(data);
+    const updatedUser = res.user;
+    if ((updatedUser.role as any) === 'TUTOR') updatedUser.role = 'TEACHER';
+
+    setUser(updatedUser);
+    localStorage.setItem('cg_user', JSON.stringify(updatedUser));
+    sessionStorage.setItem('cg_user', JSON.stringify(updatedUser));
+    return updatedUser;
+  };
+
   const logout = () => {
     RoxApiService.logout().catch(() => {});
     setUser(null);
@@ -104,6 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         login,
         register,
+        updateProfile,
         logout
       }}
     >

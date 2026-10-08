@@ -182,6 +182,9 @@ export const SubmissionsPage: React.FC = () => {
           <div className="relative lg:col-span-2">
             <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
             <input
+              id="submission-search"
+              name="submissionSearch"
+              aria-label="Search students or submissions"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -193,6 +196,9 @@ export const SubmissionsPage: React.FC = () => {
           {/* Assignment Filter */}
           <div>
             <select
+              id="filter-assignment"
+              name="filterAssignment"
+              aria-label="Filter by Assignment"
               value={selectedAssignment}
               onChange={(e) => setSelectedAssignment(e.target.value)}
               className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500"
@@ -210,6 +216,9 @@ export const SubmissionsPage: React.FC = () => {
           {/* Language Filter */}
           <div>
             <select
+              id="filter-language"
+              name="filterLanguage"
+              aria-label="Filter by Language"
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
               className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500"
@@ -224,6 +233,9 @@ export const SubmissionsPage: React.FC = () => {
           {/* Status Filter */}
           <div>
             <select
+              id="filter-status"
+              name="filterStatus"
+              aria-label="Filter by Status"
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500"
@@ -369,10 +381,12 @@ export const SubmissionsPage: React.FC = () => {
       >
         <form onSubmit={handleSingleUploadSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label htmlFor="upload-student-name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Student Full Name
             </label>
             <input
+              id="upload-student-name"
+              name="studentName"
               type="text"
               value={uploadStudentName}
               onChange={(e) => setUploadStudentName(e.target.value)}
@@ -384,10 +398,12 @@ export const SubmissionsPage: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label htmlFor="upload-assignment" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Target Assignment
               </label>
               <select
+                id="upload-assignment"
+                name="targetAssignment"
                 value={uploadAssignment}
                 onChange={(e) => setUploadAssignment(e.target.value)}
                 className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500"
@@ -399,10 +415,12 @@ export const SubmissionsPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label htmlFor="upload-language" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Programming Language
               </label>
               <select
+                id="upload-language"
+                name="programmingLanguage"
                 value={uploadLanguage}
                 onChange={(e) => setUploadLanguage(e.target.value as any)}
                 className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-hidden focus:border-indigo-500"
@@ -415,10 +433,12 @@ export const SubmissionsPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+            <label htmlFor="upload-code-content" className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
               Source Code Content
             </label>
             <textarea
+              id="upload-code-content"
+              name="sourceCode"
               rows={8}
               value={uploadCode}
               onChange={(e) => setUploadCode(e.target.value)}
@@ -463,6 +483,9 @@ export const SubmissionsPage: React.FC = () => {
               Supports standard LMS exports (Moodle, Canvas, Google Classroom)
             </p>
             <input
+              id="bulk-archive-upload"
+              name="bulkArchive"
+              aria-label="Upload submissions archive"
               type="file"
               accept=".zip,.tar,.gz"
               className="mt-4 text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 dark:file:bg-indigo-950/80 dark:file:text-indigo-300 cursor-pointer"
