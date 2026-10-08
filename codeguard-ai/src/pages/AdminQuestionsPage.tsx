@@ -219,6 +219,9 @@ export const AdminQuestionsPage: React.FC = () => {
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
+              id="admin-search-questions"
+              name="questionSearch"
+              aria-label="Search questions"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -373,10 +376,12 @@ export const AdminQuestionsPage: React.FC = () => {
               {/* Title & Language */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="sm:col-span-2">
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-title" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Question Title *
                   </label>
                   <input
+                    id="q-title"
+                    name="title"
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
@@ -386,10 +391,12 @@ export const AdminQuestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-language" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Programming Language
                   </label>
                   <select
+                    id="q-language"
+                    name="language"
                     value={language}
                     onChange={(e) => setLanguage(e.target.value)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:outline-hidden"
@@ -405,10 +412,12 @@ export const AdminQuestionsPage: React.FC = () => {
               {/* Difficulty & Limits */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-difficulty" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Difficulty Level
                   </label>
                   <select
+                    id="q-difficulty"
+                    name="difficulty"
                     value={difficulty}
                     onChange={(e) => setDifficulty(e.target.value as any)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:outline-hidden"
@@ -420,10 +429,12 @@ export const AdminQuestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-time-limit" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Time Limit (ms)
                   </label>
                   <input
+                    id="q-time-limit"
+                    name="timeLimit"
                     type="number"
                     value={timeLimit}
                     onChange={(e) => setTimeLimit(Number(e.target.value))}
@@ -432,10 +443,12 @@ export const AdminQuestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-memory-limit" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Memory Limit (MB)
                   </label>
                   <input
+                    id="q-memory-limit"
+                    name="memoryLimit"
                     type="number"
                     value={memoryLimit}
                     onChange={(e) => setMemoryLimit(Number(e.target.value))}
@@ -446,10 +459,12 @@ export const AdminQuestionsPage: React.FC = () => {
 
               {/* Problem Statement */}
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="q-description" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Problem Statement *
                 </label>
                 <textarea
+                  id="q-description"
+                  name="description"
                   rows={4}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -461,10 +476,12 @@ export const AdminQuestionsPage: React.FC = () => {
               {/* Input & Output Format */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-input-format" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Input Format
                   </label>
                   <input
+                    id="q-input-format"
+                    name="inputFormat"
                     type="text"
                     value={inputFormat}
                     onChange={(e) => setInputFormat(e.target.value)}
@@ -474,10 +491,12 @@ export const AdminQuestionsPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="q-output-format" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Output Format
                   </label>
                   <input
+                    id="q-output-format"
+                    name="outputFormat"
                     type="text"
                     value={outputFormat}
                     onChange={(e) => setOutputFormat(e.target.value)}
@@ -489,10 +508,12 @@ export const AdminQuestionsPage: React.FC = () => {
 
               {/* Constraints */}
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="q-constraints" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Constraints (one per line)
                 </label>
                 <textarea
+                  id="q-constraints"
+                  name="constraints"
                   rows={2}
                   value={constraintsText}
                   onChange={(e) => setConstraintsText(e.target.value)}
@@ -504,9 +525,9 @@ export const AdminQuestionsPage: React.FC = () => {
               {/* Test Cases Setup */}
               <div className="pt-2">
                 <div className="flex items-center justify-between mb-2">
-                  <label className="font-semibold text-slate-700 dark:text-slate-300 block">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300 block">
                     Execution Test Cases
-                  </label>
+                  </span>
                   <button
                     type="button"
                     onClick={() =>
@@ -525,7 +546,11 @@ export const AdminQuestionsPage: React.FC = () => {
                       className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-12 gap-2 items-center"
                     >
                       <div className="sm:col-span-5">
+                        <label htmlFor={`tc-input-${idx}`} className="sr-only">Test Case {idx + 1} Input</label>
                         <input
+                          id={`tc-input-${idx}`}
+                          name={`tc_input_${idx}`}
+                          aria-label={`Test Case ${idx + 1} Input`}
                           type="text"
                           value={tc.input}
                           onChange={(e) => {
@@ -538,7 +563,11 @@ export const AdminQuestionsPage: React.FC = () => {
                         />
                       </div>
                       <div className="sm:col-span-4">
+                        <label htmlFor={`tc-output-${idx}`} className="sr-only">Test Case {idx + 1} Output</label>
                         <input
+                          id={`tc-output-${idx}`}
+                          name={`tc_output_${idx}`}
+                          aria-label={`Test Case ${idx + 1} Expected Output`}
                           type="text"
                           value={tc.expected_output || ''}
                           onChange={(e) => {
@@ -554,6 +583,7 @@ export const AdminQuestionsPage: React.FC = () => {
                         <input
                           type="checkbox"
                           id={`sample-${idx}`}
+                          name={`sample_${idx}`}
                           checked={tc.is_sample}
                           onChange={(e) => {
                             const updated = [...testCases];

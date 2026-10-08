@@ -95,9 +95,9 @@ def admin_delete_question(question_id):
 # ===================== STUDENT QUESTIONS VIEW =====================
 
 @questions_bp.route("/student/questions", methods=["GET"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def student_get_questions():
-    """Students can only see PUBLISHED questions."""
+    """Students and faculty can see PUBLISHED questions."""
     db = get_database()
     user = getattr(g, "current_user", None)
     user_id = str(user["_id"]) if user else None
@@ -125,7 +125,7 @@ def student_get_questions():
     return jsonify(questions), 200
 
 @questions_bp.route("/student/questions/<question_id>", methods=["GET"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def student_get_question(question_id):
     """Student view of a single question - no hidden test case outputs."""
     db = get_database()

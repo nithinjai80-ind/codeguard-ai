@@ -207,6 +207,9 @@ export const AdminUsersPage: React.FC = () => {
           <div className="relative">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
+              id="admin-search-users"
+              name="userSearch"
+              aria-label="Search users by name or email"
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -506,11 +509,14 @@ export const AdminUsersPage: React.FC = () => {
 
             <form onSubmit={handleSaveUser} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="user-fullname" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Full Name *
                 </label>
                 <input
+                  id="user-fullname"
+                  name="name"
                   type="text"
+                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g., Arun Kumar"
@@ -520,11 +526,14 @@ export const AdminUsersPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="user-email" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Email Address *
                 </label>
                 <input
+                  id="user-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   disabled={isEditing}
                   onChange={(e) => setEmail(e.target.value)}
@@ -536,10 +545,12 @@ export const AdminUsersPage: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="user-role" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     System Role *
                   </label>
                   <select
+                    id="user-role"
+                    name="role"
                     value={role}
                     onChange={(e) => setRole(e.target.value as any)}
                     className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs focus:outline-hidden"
@@ -550,10 +561,12 @@ export const AdminUsersPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  <label htmlFor="user-department" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Department
                   </label>
                   <input
+                    id="user-department"
+                    name="department"
                     type="text"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
@@ -564,11 +577,14 @@ export const AdminUsersPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label htmlFor="user-password" className="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   {isEditing ? 'New Password (leave blank to keep current)' : 'Account Password *'}
                 </label>
                 <input
+                  id="user-password"
+                  name="password"
                   type="password"
+                  autoComplete={isEditing ? 'new-password' : 'current-password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"

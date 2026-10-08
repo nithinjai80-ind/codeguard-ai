@@ -94,13 +94,16 @@ export const RegisterPage: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="reg-name" className="block text-xs font-semibold text-slate-300 mb-1">
                 Full Name
               </label>
               <div className="relative">
                 <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
+                  id="reg-name"
+                  name="name"
                   type="text"
+                  autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Dr. Rajesh Sharma"
@@ -111,13 +114,16 @@ export const RegisterPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="reg-email" className="block text-xs font-semibold text-slate-300 mb-1">
                 Institutional Email
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
+                  id="reg-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="rajesh.sharma@nehru.ac.in"
@@ -128,13 +134,16 @@ export const RegisterPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label htmlFor="reg-password" className="block text-xs font-semibold text-slate-300 mb-1">
                 Password
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
+                  id="reg-password"
+                  name="password"
                   type="password"
+                  autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Minimum 6 characters"
@@ -147,10 +156,12 @@ export const RegisterPage: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="reg-role" className="block text-xs font-semibold text-slate-300 mb-1">
                   Role
                 </label>
                 <select
+                  id="reg-role"
+                  name="role"
                   value={role}
                   onChange={(e) => setRole(e.target.value as any)}
                   className="w-full px-3 py-2.5 bg-slate-950/60 border border-slate-800 rounded-xl text-xs text-white focus:outline-hidden focus:border-indigo-500"
@@ -162,11 +173,13 @@ export const RegisterPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
+                <label htmlFor="reg-department" className="block text-xs font-semibold text-slate-300 mb-1">
                   Department
                 </label>
                 <div className="relative">
                   <input
+                    id="reg-department"
+                    name="department"
                     type="text"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}

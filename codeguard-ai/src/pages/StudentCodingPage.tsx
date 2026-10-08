@@ -250,6 +250,9 @@ export const StudentCodingPage: React.FC = () => {
         <div className="flex items-center gap-2">
           {/* Language Selector */}
           <select
+            id="code-language-select"
+            name="language"
+            aria-label="Select Programming Language"
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value as any)}
             className="text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-hidden"
@@ -404,6 +407,9 @@ export const StudentCodingPage: React.FC = () => {
 
             {/* Textarea Code Input */}
             <textarea
+              id="code-editor-input"
+              name="sourceCode"
+              aria-label="Source Code Editor"
               value={code}
               onChange={(e) => setCode(e.target.value)}
               onKeyDown={handleEditorKeyDown}

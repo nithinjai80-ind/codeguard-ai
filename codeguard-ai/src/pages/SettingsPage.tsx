@@ -150,19 +150,22 @@ export const SettingsPage: React.FC = () => {
             {/* Structural Threshold */}
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
-                <div>
+                <label htmlFor="settings-structural-threshold">
                   <span className="font-semibold text-slate-900 dark:text-white block">
                     Structural Similarity Threshold
                   </span>
                   <span className="text-[11px] text-slate-400">
                     AST node sequences and CFG branch matches
                   </span>
-                </div>
+                </label>
                 <span className="text-sm font-mono font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20">
                   {settings.structuralThreshold}%
                 </span>
               </div>
               <input
+                id="settings-structural-threshold"
+                name="structuralThreshold"
+                aria-label="Structural Similarity Threshold"
                 type="range"
                 min="50"
                 max="98"
@@ -177,19 +180,22 @@ export const SettingsPage: React.FC = () => {
             {/* Semantic Threshold */}
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
-                <div>
+                <label htmlFor="settings-semantic-threshold">
                   <span className="font-semibold text-slate-900 dark:text-white block">
                     Semantic Similarity Threshold
                   </span>
                   <span className="text-[11px] text-slate-400">
                     CodeBERT dense vector cosine similarity
                   </span>
-                </div>
+                </label>
                 <span className="text-sm font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
                   {settings.semanticThreshold}%
                 </span>
               </div>
               <input
+                id="settings-semantic-threshold"
+                name="semanticThreshold"
+                aria-label="Semantic Similarity Threshold"
                 type="range"
                 min="50"
                 max="98"
@@ -204,19 +210,22 @@ export const SettingsPage: React.FC = () => {
             {/* Behavioral Threshold */}
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
-                <div>
+                <label htmlFor="settings-behavioral-threshold">
                   <span className="font-semibold text-slate-900 dark:text-white block">
                     Behavioral Similarity Threshold
                   </span>
                   <span className="text-[11px] text-slate-400">
                     Test harness input/output execution equivalence
                   </span>
-                </div>
+                </label>
                 <span className="text-sm font-mono font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                   {settings.behavioralThreshold}%
                 </span>
               </div>
               <input
+                id="settings-behavioral-threshold"
+                name="behavioralThreshold"
+                aria-label="Behavioral Similarity Threshold"
                 type="range"
                 min="50"
                 max="98"
@@ -231,19 +240,22 @@ export const SettingsPage: React.FC = () => {
             {/* Timeline Window */}
             <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
-                <div>
+                <label htmlFor="settings-timeline-window">
                   <span className="font-semibold text-slate-900 dark:text-white block">
                     Timeline Correlation Window
                   </span>
                   <span className="text-[11px] text-slate-400">
                     Max minutes between submissions triggering correlation
                   </span>
-                </div>
+                </label>
                 <span className="text-sm font-mono font-bold text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded">
                   {settings.timelineWindowMinutes} min
                 </span>
               </div>
               <input
+                id="settings-timeline-window"
+                name="timelineWindowMinutes"
+                aria-label="Timeline Correlation Window"
                 type="range"
                 min="2"
                 max="60"
@@ -259,16 +271,19 @@ export const SettingsPage: React.FC = () => {
 
           {/* Minimum Evidence Regions Input */}
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between">
-            <div>
+            <label htmlFor="settings-min-evidence">
               <span className="font-semibold text-xs text-slate-900 dark:text-white block">
                 Minimum Matching Evidence Regions
               </span>
               <span className="text-[11px] text-slate-500">
                 Number of distinct code blocks required before placing submission into Review Queue
               </span>
-            </div>
+            </label>
             <div className="flex items-center gap-2">
               <input
+                id="settings-min-evidence"
+                name="minEvidenceRegions"
+                aria-label="Minimum Matching Evidence Regions"
                 type="number"
                 min="1"
                 max="10"
@@ -339,8 +354,10 @@ export const SettingsPage: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             {/* Rule 1 */}
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
+            <label htmlFor="rule-structural" className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
               <input
+                id="rule-structural"
+                name="rule-structural"
                 type="checkbox"
                 checked={settings.activeRules.structural}
                 onChange={(e) =>
@@ -362,8 +379,10 @@ export const SettingsPage: React.FC = () => {
             </label>
 
             {/* Rule 2 */}
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
+            <label htmlFor="rule-semantic" className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
               <input
+                id="rule-semantic"
+                name="rule-semantic"
                 type="checkbox"
                 checked={settings.activeRules.semantic}
                 onChange={(e) =>
@@ -385,8 +404,10 @@ export const SettingsPage: React.FC = () => {
             </label>
 
             {/* Rule 3 */}
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
+            <label htmlFor="rule-behavioral" className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
               <input
+                id="rule-behavioral"
+                name="rule-behavioral"
                 type="checkbox"
                 checked={settings.activeRules.behavioral}
                 onChange={(e) =>
@@ -408,8 +429,10 @@ export const SettingsPage: React.FC = () => {
             </label>
 
             {/* Rule 4 */}
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
+            <label htmlFor="rule-timeline" className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 cursor-pointer hover:border-slate-300">
               <input
+                id="rule-timeline"
+                name="rule-timeline"
                 type="checkbox"
                 checked={settings.activeRules.timeline}
                 onChange={(e) =>

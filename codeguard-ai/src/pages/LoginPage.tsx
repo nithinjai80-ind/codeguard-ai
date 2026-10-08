@@ -112,13 +112,16 @@ export const LoginPage: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1.5">
+              <label htmlFor="login-email" className="block text-xs font-medium text-slate-300 mb-1.5">
                 Institutional Email
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
+                  id="login-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@rox.ai or name@institution.edu"
@@ -130,7 +133,7 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-medium text-slate-300">
+                <label htmlFor="login-password" className="block text-xs font-medium text-slate-300">
                   Password
                 </label>
                 <button
@@ -144,7 +147,10 @@ export const LoginPage: React.FC = () => {
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
+                  id="login-password"
+                  name="password"
                   type="password"
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
@@ -155,8 +161,10 @@ export const LoginPage: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <label className="flex items-center gap-2 cursor-pointer">
+              <label htmlFor="login-remember" className="flex items-center gap-2 cursor-pointer">
                 <input
+                  id="login-remember"
+                  name="rememberMe"
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}

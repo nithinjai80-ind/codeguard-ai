@@ -7,7 +7,7 @@ from services.analysis_engine.pipeline import AnalysisPipeline
 student_bp = Blueprint("student", __name__, url_prefix="/api/student")
 
 @student_bp.route("/stats", methods=["GET"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def get_student_stats():
     """
     Student dashboard statistics:
@@ -42,7 +42,7 @@ def get_student_stats():
     rejected = sum(1 for s in submissions if s.get("status") in ["REJECTED", "ESCALATED_DISCIPLINARY"])
 
     return jsonify({
-        "student_name": user.get("name", "Student"),
+        "student_name": user.get("name", "Student") if user else "Student",
         "questions_available": questions_available,
         "submitted": total_submitted,
         "accepted": accepted,
@@ -53,7 +53,7 @@ def get_student_stats():
 
 
 @student_bp.route("/questions", methods=["GET"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def get_student_questions():
     """List published questions with submission status for the current student."""
     db = get_database()
@@ -107,7 +107,7 @@ def get_student_questions():
 
 
 @student_bp.route("/questions/<question_id>", methods=["GET"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def get_student_question(question_id):
     """Retrieve full details for a published question (with only sample test cases)."""
     db = get_database()
@@ -188,7 +188,7 @@ def get_student_question(question_id):
 
 
 @student_bp.route("/submissions", methods=["POST"])
-@roles_required("STUDENT")
+@roles_required("STUDENT", "TEACHER", "ADMIN")
 def submit_code():
     """
     Student submits solution.
