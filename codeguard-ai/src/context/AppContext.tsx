@@ -62,6 +62,9 @@ interface AppContextType {
   navigateToSimilarity: (submissionAId: string, submissionBId: string) => void;
   navigateToCluster: (clusterId: string) => void;
   navigateToCoding: (questionId: string) => void;
+  isSidebarCollapsed: boolean;
+  setIsSidebarCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleSidebarCollapse: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -76,6 +79,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   });
   const [selectedClusterId, setSelectedClusterId] = useState<string>('CLUSTER-A');
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
+  const toggleSidebarCollapse = () => setIsSidebarCollapsed((prev) => !prev);
   const [toasts, setToasts] = useState<ToastItem[]>([
     {
       id: 'init-toast',
@@ -138,7 +143,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         navigateToSubmission,
         navigateToSimilarity,
         navigateToCluster,
-        navigateToCoding
+        navigateToCoding,
+        isSidebarCollapsed,
+        setIsSidebarCollapsed,
+        toggleSidebarCollapse
       }}
     >
       {children}

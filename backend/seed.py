@@ -296,6 +296,20 @@ def seed_all():
                     "explanation": "Last element."
                 }
             ],
+            # function_signatures: what the student sees and writes inside
+            "function_signatures": {
+                "Java": "public static int search(int[] arr, int target) {",
+                "Python": "def search(arr: list, target: int) -> int:",
+                "C++": "int search(vector<int>& arr, int target) {",
+                "JavaScript": "function search(arr, target) {"
+            },
+            # driver_templates: full file that wraps {{STUDENT_CODE}} and drives stdin test cases
+            "driver_templates": {
+                "Java": "import java.util.Scanner;\npublic class Solution {\n{{STUDENT_CODE}}\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] arr = new int[n];\n        for (int i = 0; i < n; i++) arr[i] = sc.nextInt();\n        int target = sc.nextInt();\n        System.out.println(search(arr, target));\n    }\n}",
+                "Python": "import sys\ninput_data = sys.stdin.read().split()\nidx = 0\nn = int(input_data[idx]); idx += 1\narr = [int(input_data[idx + i]) for i in range(n)]; idx += n\ntarget = int(input_data[idx])\n\n{{STUDENT_CODE}}\n\nprint(search(arr, target))",
+                "C++": "#include <iostream>\n#include <vector>\nusing namespace std;\n{{STUDENT_CODE}}\nint main() {\n    int n; cin >> n;\n    vector<int> arr(n);\n    for (int i = 0; i < n; i++) cin >> arr[i];\n    int target; cin >> target;\n    cout << search(arr, target) << endl;\n    return 0;\n}",
+                "JavaScript": "const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst n = parseInt(lines[0]);\nconst arr = lines[1].split(' ').map(Number);\nconst target = parseInt(lines[2]);\n{{STUDENT_CODE}}\nconsole.log(search(arr, target));"
+            },
             "created_by_name": "System Administrator",
             "status": "PUBLISHED",
             "created_at": now_iso,
@@ -345,6 +359,18 @@ def seed_all():
                     "is_sample": False
                 }
             ],
+            "function_signatures": {
+                "Java": "public static int findMax(int[] nums) {",
+                "Python": "def find_max(nums: list) -> int:",
+                "C++": "int findMax(vector<int>& nums) {",
+                "JavaScript": "function findMax(nums) {"
+            },
+            "driver_templates": {
+                "Java": "import java.util.Scanner;\npublic class Solution {\n{{STUDENT_CODE}}\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        System.out.println(findMax(nums));\n    }\n}",
+                "Python": "import sys\ndata = sys.stdin.read().split()\nn = int(data[0])\nnums = [int(data[1 + i]) for i in range(n)]\n\n{{STUDENT_CODE}}\n\nprint(find_max(nums))",
+                "C++": "#include <iostream>\n#include <vector>\nusing namespace std;\n{{STUDENT_CODE}}\nint main() {\n    int n; cin >> n;\n    vector<int> nums(n);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    cout << findMax(nums) << endl;\n    return 0;\n}",
+                "JavaScript": "const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst n = parseInt(lines[0]);\nconst nums = lines[1].split(' ').map(Number);\n{{STUDENT_CODE}}\nconsole.log(findMax(nums));"
+            },
             "created_by_name": "System Administrator",
             "status": "PUBLISHED",
             "created_at": now_iso,
@@ -379,6 +405,18 @@ def seed_all():
                     "is_sample": True
                 }
             ],
+            "function_signatures": {
+                "Java": "public static int[] twoSum(int[] nums, int target) {",
+                "Python": "def two_sum(nums: list, target: int) -> list:",
+                "C++": "vector<int> twoSum(vector<int>& nums, int target) {",
+                "JavaScript": "function twoSum(nums, target) {"
+            },
+            "driver_templates": {
+                "Java": "import java.util.Scanner;\npublic class Solution {\n{{STUDENT_CODE}}\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        int n = sc.nextInt(), target = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        int[] res = twoSum(nums, target);\n        System.out.println(res[0] + \" \" + res[1]);\n    }\n}",
+                "Python": "import sys\ndata = sys.stdin.read().split()\nn, target = int(data[0]), int(data[1])\nnums = [int(data[2 + i]) for i in range(n)]\n\n{{STUDENT_CODE}}\n\nres = two_sum(nums, target)\nprint(res[0], res[1])",
+                "C++": "#include <iostream>\n#include <vector>\nusing namespace std;\n{{STUDENT_CODE}}\nint main() {\n    int n, target; cin >> n >> target;\n    vector<int> nums(n);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    auto res = twoSum(nums, target);\n    cout << res[0] << \" \" << res[1] << endl;\n    return 0;\n}",
+                "JavaScript": "const lines = require('fs').readFileSync('/dev/stdin','utf8').trim().split('\\n');\nconst [n, target] = lines[0].split(' ').map(Number);\nconst nums = lines[1].split(' ').map(Number);\n{{STUDENT_CODE}}\nconst res = twoSum(nums, target);\nconsole.log(res[0] + ' ' + res[1]);"
+            },
             "created_by_name": "Dr. Priya Kumar",
             "status": "PUBLISHED",
             "created_at": now_iso,
@@ -408,8 +446,30 @@ def seed_all():
                     "input": "A man, a plan, a canal: Panama",
                     "expected_output": "true",
                     "is_sample": True
+                },
+                {
+                    "input": "race a car",
+                    "expected_output": "false",
+                    "is_sample": True
+                },
+                {
+                    "input": " ",
+                    "expected_output": "true",
+                    "is_sample": False
                 }
             ],
+            "function_signatures": {
+                "Java": "public static boolean isPalindrome(String s) {",
+                "Python": "def is_palindrome(s: str) -> bool:",
+                "C++": "bool isPalindrome(string s) {",
+                "JavaScript": "function isPalindrome(s) {"
+            },
+            "driver_templates": {
+                "Java": "import java.util.Scanner;\npublic class Solution {\n{{STUDENT_CODE}}\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.nextLine();\n        System.out.println(isPalindrome(s));\n    }\n}",
+                "Python": "import sys\ns = sys.stdin.readline().rstrip('\\n')\n\n{{STUDENT_CODE}}\n\nprint(str(is_palindrome(s)).lower())",
+                "C++": "#include <iostream>\n#include <string>\nusing namespace std;\n{{STUDENT_CODE}}\nint main() {\n    string s;\n    getline(cin, s);\n    cout << (isPalindrome(s) ? \"true\" : \"false\") << endl;\n    return 0;\n}",
+                "JavaScript": "const s = require('fs').readFileSync('/dev/stdin','utf8').trim();\n{{STUDENT_CODE}}\nconsole.log(isPalindrome(s));"
+            },
             "created_by_name": "System Administrator",
             "status": "PUBLISHED",
             "created_at": now_iso,

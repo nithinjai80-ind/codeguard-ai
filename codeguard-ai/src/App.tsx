@@ -38,7 +38,7 @@ import { ReportsPage } from './pages/ReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
 
 const MainLayout: React.FC = () => {
-  const { currentView, setCurrentView } = useApp();
+  const { currentView, setCurrentView, isSidebarCollapsed, toggleSidebarCollapse } = useApp();
   const { user, isAuthenticated, isLoading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -210,10 +210,24 @@ const MainLayout: React.FC = () => {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <Topbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300">
+        <Topbar
+          onToggleSidebar={() => {
+            if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+              setIsSidebarOpen(!isSidebarOpen);
+            } else {
+              toggleSidebarCollapse();
+            }
+          }}
+        />
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <main
+          className={`flex-1 ${
+            currentView === 'student-coding'
+              ? 'p-2 sm:p-3 lg:p-4 w-full max-w-none'
+              : 'p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto'
+          }`}
+        >
           {renderActiveView()}
         </main>
       </div>

@@ -113,6 +113,10 @@ def student_get_questions():
                 for tc in q["test_cases"]
                 if tc.get("is_sample", False)
             ]
+        # Expose per-language function signature stubs (student editor starters)
+        # driver_templates intentionally NOT sent here to avoid large payload on list page
+        q["function_signatures"] = q.get("function_signatures", {})
+        q.pop("driver_templates", None)
         # Check if student has submitted for this question
         submission = db.submissions.find_one({
             "student_id": user_id,
@@ -146,6 +150,12 @@ def student_get_question(question_id):
             else:
                 visible.append({"input": tc.get("input", ""), "is_sample": False})
         q["test_cases"] = visible
+
+    # Expose function_signatures and driver_templates so the frontend
+    # can initialise the editor with the correct stub and the run endpoint
+    # can wrap the student code correctly.
+    q["function_signatures"] = q.get("function_signatures", {})
+    q["driver_templates"] = q.get("driver_templates", {})
 
     # Check submission status
     submission = db.submissions.find_one({

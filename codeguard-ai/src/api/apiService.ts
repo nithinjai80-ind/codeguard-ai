@@ -371,17 +371,25 @@ export class RoxApiService {
     }
   }
 
-  public static async getCodeTemplate(language: string): Promise<{ language: string; template: string }> {
+  public static async getCodeTemplate(
+    language: string,
+    questionId?: string,
+  ): Promise<{ language: string; template: string; function_signature?: string; driver_template?: string }> {
     try {
-      return await this.request<{ language: string; template: string }>(`/code/template?language=${encodeURIComponent(language)}`);
+      const params = new URLSearchParams({ language });
+      if (questionId) params.set('question_id', questionId);
+      return await this.request<{ language: string; template: string; function_signature?: string; driver_template?: string }>(
+        `/code/template?${params.toString()}`
+      );
     } catch {
-      const templates: Record<string, string> = {
-        Java: 'public class Solution {\n    public static void main(String[] args) {\n        // Your code here\n    }\n}',
-        Python: '# Write your solution here\ndef solve():\n    pass\n',
-        'C++': '#include <iostream>\nusing namespace std;\n\nint main() {\n    // Your code here\n    return 0;\n}',
-        JavaScript: '// Write your solution here\nfunction solve() {\n    // Code here\n}\n'
+      // Offline fallback — function stubs only (not full class + main)
+      const stubs: Record<string, string> = {
+        Java: 'public static int solution(int[] arr, int target) {\n    // TODO: implement your solution here\n    return -1;\n}',
+        Python: 'def solution(arr, target):\n    # TODO: implement your solution here\n    pass',
+        'C++': 'int solution(vector<int>& arr, int target) {\n    // TODO: implement your solution here\n    return -1;\n}',
+        JavaScript: 'function solution(arr, target) {\n    // TODO: implement your solution here\n    return -1;\n}',
       };
-      return { language, template: templates[language] || '// Solution\n' };
+      return { language, template: stubs[language] || '// Write your solution here\n' };
     }
   }
 
