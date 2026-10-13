@@ -144,7 +144,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
       <div className="flex items-center gap-3">
         <button
           onClick={onToggleSidebar}
-          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="p-2 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          title="Toggle Workspace Sidebar (Left to Right / Right to Left)"
           aria-label="Toggle Navigation"
         >
           <Menu className="w-5 h-5" />

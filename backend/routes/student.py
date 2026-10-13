@@ -79,6 +79,10 @@ def get_student_questions():
                 if tc.get("is_sample", False)
             ]
 
+        # Expose per-language function signatures (editor starters) — omit driver_templates on list
+        q["function_signatures"] = q.get("function_signatures", {})
+        q.pop("driver_templates", None)
+
         # Check this student's submission status for this question
         q_id = q.get("id") or str(q.get("_id"))
         submission = db.submissions.find_one({
@@ -162,6 +166,10 @@ def get_student_question(question_id):
             }
             for tc in q["test_cases"]
         ]
+
+    # Expose function_signatures and driver_templates for the coding editor
+    q["function_signatures"] = q.get("function_signatures", {})
+    q["driver_templates"] = q.get("driver_templates", {})
 
     # Student submission check
     q_id = q.get("id") or str(q.get("_id"))
