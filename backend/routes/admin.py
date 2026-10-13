@@ -293,6 +293,7 @@ def list_users():
         elif u.get("role") in ["TEACHER", "TUTOR"]:
             u["reviews_count"] = db.reviews.count_documents({"teacher_id": user_id})
 
+        u["id"] = user_id  # Expose MongoDB _id as 'id' for frontend User.id field
         u["status"] = u.get("status", "ACTIVE")
         users.append(u)
 
